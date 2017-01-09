@@ -112,8 +112,8 @@ public class UserCredentialsServiceImpl implements UserCredentialsService {
 
   @Nullable
   private UserCredentials tryGetCustomCredentials() {
-    final String userName = tryGetFirstNotEmpty(myParametersService.tryGetParameter(Constants.USER));
-    final String password = tryGetFirstNotEmpty(myParametersService.tryGetParameter(Constants.PASSWORD));
+    final String userName = tryGetFirstNotEmpty(myParametersService.tryGetParameter(DeprecatedConstants.USER_FROM_UI), myParametersService.tryGetParameter(Constants.USER));
+    final String password = tryGetFirstNotEmpty(myParametersService.tryGetParameter(DeprecatedConstants.PASSWORD_FROM_UI), myParametersService.tryGetParameter(Constants.PASSWORD));
 
     if(StringUtil.isEmptyOrSpaces(userName) || StringUtil.isEmptyOrSpaces(password)) {
       return null;
@@ -127,7 +127,7 @@ public class UserCredentialsServiceImpl implements UserCredentialsService {
     final String userName;
     final String password;
 
-    userName = tryGetFirstNotEmpty(myPropertiesService.tryGetProperty(credentials, Constants.USER));
+    userName = tryGetFirstNotEmpty(myPropertiesService.tryGetProperty(credentials, Constants.USER), myPropertiesService.tryGetProperty(credentials, Constants.USER));
     if(StringUtil.isEmptyOrSpaces(userName)) {
       if(trowException) {
         throw new BuildStartException("RunAs user must be defined for \"" + credentials + "\"");
@@ -137,7 +137,7 @@ public class UserCredentialsServiceImpl implements UserCredentialsService {
       }
     }
 
-    password = tryGetFirstNotEmpty(myPropertiesService.tryGetProperty(credentials, Constants.PASSWORD));
+    password = tryGetFirstNotEmpty(myPropertiesService.tryGetProperty(credentials, Constants.PASSWORD), myPropertiesService.tryGetProperty(credentials, Constants.PASSWORD));
     if(StringUtil.isEmptyOrSpaces(password)) {
       if(trowException) {
         throw new BuildStartException("RunAs password must be defined for \"" + credentials + "\"");
@@ -157,7 +157,7 @@ public class UserCredentialsServiceImpl implements UserCredentialsService {
     final WindowsIntegrityLevel windowsIntegrityLevel = WindowsIntegrityLevel.tryParse(getParam(credentials, Constants.WINDOWS_INTEGRITY_LEVEL, isPredefined));
     final LoggingLevel loggingLevel = LoggingLevel.tryParse(getParam(credentials, Constants.LOGGING_LEVEL, isPredefined));
 
-    String additionalArgs = tryGetFirstNotEmpty(getParam(credentials, Constants.ADDITIONAL_ARGS, isPredefined));
+    String additionalArgs = tryGetFirstNotEmpty(getParam(credentials, DeprecatedConstants.ADDITIONAL_ARGS_FROM_UI, isPredefined), getParam(credentials, Constants.ADDITIONAL_ARGS, isPredefined));
     if(StringUtil.isEmptyOrSpaces(additionalArgs)) {
       additionalArgs = "";
     }
